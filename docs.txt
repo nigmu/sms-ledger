@@ -1,0 +1,8 @@
+Steps to run the system:
+
+Terminal: 
+1. uvicorn main:app --host 0.0.0.0 --port 8000
+2. ngrok http 8000
+3. Laptop and Phone on same wifi
+4. SMS Gate Online with Local Server on
+4. curl.exe -u USER:PASSWORD-P http://LOCAL ADDRESS/webhooks
