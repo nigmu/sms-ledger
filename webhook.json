@@ -1,0 +1,5 @@
+{
+  "id": "sms-main",
+  "url": "https://awesome-mouse-interface-hobby.trycloudflare.com/webhook/sms",
+  "event": "sms:received"
+}

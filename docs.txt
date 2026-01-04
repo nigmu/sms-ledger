@@ -2,7 +2,16 @@ Steps to run the system:
 
 Terminal: 
 1. uvicorn main:app --host 0.0.0.0 --port 8000
-2. ngrok http 8000
-3. Laptop and Phone on same wifi
-4. SMS Gate Online with Local Server on
-4. curl.exe -u USER:PASSWORD-P http://LOCAL ADDRESS/webhooks
+
+2. Laptop and Phone on same wifi
+3. SMS Gate Online with Local Server on
+
+
+4. For Establishing Connection with the Ngrok ------ ngrok http 8000
+
+   For Establishing Connection with the Cloudflare ------ curl.exe -X POST -u sms:SYoATI-P -H "Content-Type: application/json" --data-binary "@webhook.json" http://10.96.221.217:8080/webhooks
+   curl.exe -X POST -u sms:SYoATI-P -H "Content-Type: application/json" --data-binary "@webhook.json" http://10.96.221.217:8080/webhooks
+
+
+5. For Verification of Connection ------ curl.exe -u USER:PASSWORD-P http://LOCAL ADDRESS/webhooks
+   curl.exe -u sms:SYoATI-P http://10.96.221.217:8080/webhooks
