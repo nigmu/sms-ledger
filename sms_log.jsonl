@@ -1,6 +1,0 @@
-
-{"event": "sms:received", "message_id": "1134afa6", "message": "Hi", "phone": "+917008534619", "sim": 1, "received_at": "2026-01-04T21:55:21.000+05:30", "ingested_at": "2026-01-04T16:25:22.587616"}
-{"event": "sms:received", "message_id": "1134afa6", "message": "Hi", "phone": "+917008534619", "sim": 1, "received_at": "2026-01-04T21:55:21.000+05:30", "ingested_at": "2026-01-04T16:25:22.590630"}
-{"event": "sms:received", "message_id": "1134afa6", "message": "Hi", "phone": "+917008534619", "sim": 1, "received_at": "2026-01-04T21:55:21.000+05:30", "ingested_at": "2026-01-04T16:25:22.593687"}
-{"event": "sms:received", "message_id": "1134afa6", "message": "Hi", "phone": "+917008534619", "sim": 1, "received_at": "2026-01-04T21:55:21.000+05:30", "ingested_at": "2026-01-04T16:25:22.596371"}
-{"event": "sms:received", "message_id": "1134afa6", "message": "Hi", "phone": "+917008534619", "sim": 1, "received_at": "2026-01-04T21:55:21.000+05:30", "ingested_at": "2026-01-04T16:25:22.599741"}

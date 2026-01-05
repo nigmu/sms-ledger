@@ -3,26 +3,26 @@ from datetime import datetime
 import json
 
 app = FastAPI()
+SEEN = set()
 
 @app.post("/webhook/sms")
 async def sms_webhook(request: Request):
     raw = await request.body()
-
     if not raw:
-        # harmless empty POST (health checks, probes, noise)
-        return {"status": "ignored", "reason": "empty body"}
+        return {"status": "ignored"}
 
-    try:
-        body = json.loads(raw)
-    except json.JSONDecodeError:
-        raise HTTPException(status_code=400, detail="Invalid JSON")
-
-    event = body.get("event")
+    body = json.loads(raw)
     payload = body.get("payload", {})
+    msg_id = payload.get("messageId")
+
+    if msg_id in SEEN:
+        return {"status": "duplicate"}
+
+    SEEN.add(msg_id)
 
     record = {
-        "event": event,
-        "message_id": payload.get("messageId"),
+        "event": body.get("event"),
+        "message_id": msg_id,
         "message": payload.get("message"),
         "phone": payload.get("phoneNumber"),
         "sim": payload.get("simNumber"),
@@ -34,3 +34,4 @@ async def sms_webhook(request: Request):
         f.write(json.dumps(record) + "\n")
 
     return {"status": "ok"}
+
