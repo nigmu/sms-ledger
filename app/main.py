@@ -1,37 +1,60 @@
 from fastapi import FastAPI, Request
 from datetime import datetime
-import json
+import sqlite3
+from pathlib import Path
 
-app = FastAPI()
-SEEN = set()
+app = FastAPI(title="SMS Ledger")
+
+DB_PATH = Path("sms.db")
+
+def init_db():
+    with sqlite3.connect(DB_PATH) as conn:
+        conn.execute("""
+        CREATE TABLE IF NOT EXISTS sms (
+            message_id TEXT PRIMARY KEY,
+            phone TEXT,
+            message TEXT,
+            sim INTEGER,
+            received_at TEXT,
+            ingested_at TEXT
+        )
+        """)
+
+@app.on_event("startup")
+def startup():
+    init_db()
 
 @app.post("/webhook/sms")
 async def sms_webhook(request: Request):
-    raw = await request.body()
-    if not raw:
-        return {"status": "ignored"}
-
-    body = json.loads(raw)
+    body = await request.json()
     payload = body.get("payload", {})
-    msg_id = payload.get("messageId")
 
-    if msg_id in SEEN:
-        return {"status": "duplicate"}
+    record = (
+        payload.get("messageId"),
+        payload.get("phoneNumber"),
+        payload.get("message"),
+        payload.get("simNumber"),
+        payload.get("receivedAt"),
+        datetime.utcnow().isoformat(),
+    )
 
-    SEEN.add(msg_id)
-
-    record = {
-        "event": body.get("event"),
-        "message_id": msg_id,
-        "message": payload.get("message"),
-        "phone": payload.get("phoneNumber"),
-        "sim": payload.get("simNumber"),
-        "received_at": payload.get("receivedAt"),
-        "ingested_at": datetime.utcnow().isoformat()
-    }
-
-    with open("sms_log.jsonl", "a") as f:
-        f.write(json.dumps(record) + "\n")
+    with sqlite3.connect(DB_PATH) as conn:
+        conn.execute("""
+            INSERT OR IGNORE INTO sms
+            (message_id, phone, message, sim, received_at, ingested_at)
+            VALUES (?, ?, ?, ?, ?, ?)
+        """, record)
 
     return {"status": "ok"}
 
+@app.get("/stats")
+def stats():
+    with sqlite3.connect(DB_PATH) as conn:
+        cur = conn.cursor()
+        cur.execute("SELECT COUNT(*) FROM sms")
+        total = cur.fetchone()[0]
+    return {"total_messages": total}
+
+@app.get("/")
+def health():
+    return {"status": "ok"}
