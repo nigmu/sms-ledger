@@ -2,6 +2,8 @@ venv/
 sms_log.jsonl
 webhook.json
 docs.txt
+cert.pem
+key.pem
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
