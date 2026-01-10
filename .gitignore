@@ -4,6 +4,11 @@ webhook.json
 docs.txt
 cert.pem
 key.pem
+project_secrets/
+.env
+
+google_credentials.json
+tokens.json
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
